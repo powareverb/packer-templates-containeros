@@ -1,0 +1,33 @@
+{
+    "ignition": {
+      "config": {},
+      "timeouts": {},
+      "version": "2.1.0"
+    },
+    "networkd": {},
+    "passwd": {
+      "users": [
+        {
+          "name": "core",
+          "sshAuthorizedKeys": [
+            "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAqTKCokee2XPlggoWBkc+IH6CRcLGZ722T8UKPBwR8GuaKoS4QMDKmTwPQhIuSj4vLlQKU7trvgJAXi/fRBo1C4Ija8eoKpBce9C3ofcHWVvqkhsDqM+qe/8+dJih9MZfNTiDRstMaQjIDUHTI7+v92OKnkMDGHc9T48pbZBxJikKULBWvfiYKImXTRvdig7kN9/1GCwPOC1SwmMsn8j22VbRJqAIMtc7Yf4jhqO3NFFpmGF1cgikVSEubOCUEFvJQjSM1NV+ikOoc6Tx7Ycnt6wfgLLeJleMU8YwCU/SKYt1qDfxv+v16NgpoSxnOQiPoW+KynWrFnQf78ShsjTd+Q== c6:86:74:6c:5a:54:ef:a5:44:3f:3f:ad:e2:49:c2:2f rsa-key-20150424"
+          ]
+        }
+      ]
+    },
+    "storage": {
+      "files": [
+        {
+          "filesystem": "root",
+          "group": {},
+          "path": "/etc/motd",
+          "user": {},
+          "contents": {
+            "source": "data:,Stateful%20CoreOS%20Installation.%0A",
+            "verification": {}
+          }
+        }
+      ]
+    },
+    "systemd": {}
+  }

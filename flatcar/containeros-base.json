@@ -1,0 +1,45 @@
+{
+  "builders": [
+    {
+      "type": "hyperv-iso",
+      "guest_additions_mode": "disable",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "md5",
+      "ram_size": 2048,
+      "vm_name": "flatcar-min",
+      "ssh_username": "rancher",
+      "ssh_password": "rancher",
+      "communicator": "none",
+      "shutdown_command": "echo 'packer' | shutdown -P now",
+      "shutdown_timeout": "15m",
+      "switch_name": "External Switch",
+      "http_directory": "scripts",
+      "boot_wait": "{{user `boot_wait`}}",
+      "boot_command":
+      [
+        "export http_proxy=http://{{.HTTPIP}}:{{ user `proxy_port` }}<enter>",
+        "wget http://{{.HTTPIP}}:{{.HTTPPort}}/install2disk.sh<enter>",
+        "wget http://{{.HTTPIP}}:{{.HTTPPort}}/installpowershell.sh<enter>",
+        "chmod a+x *.sh<enter>",
+        "wget http://{{.HTTPIP}}:{{.HTTPPort}}/ignition.json<enter>",
+        "wget http://{{.HTTPIP}}:{{.HTTPPort}}/files/flatcar_production_image.bin.bz2<enter>",
+        "wget -o /tmp/powershell.tar.gz http://{{.HTTPIP}}:{{.HTTPPort}}/files/powershell.tar.gz<enter>",
+        "./install2disk.sh<enter>"
+      ]
+    }
+  ],
+  "provisioners": [
+    
+  ],
+  "post-processors": [
+  ],
+  "variables": {
+    "boot_wait": "20s",
+    "proxy_port": "3128",
+    "coreos_channel": "stable",
+    "iso_checksum_url": "https://stable.release.flatcar-linux.net/amd64-usr/1855.5.0/flatcar_production_iso.DIGESTS",
+    "iso_checksum": "b200fa75125e7e9131852a8a5665cfee",
+    "iso_url": "https://stable.release.flatcar-linux.net/amd64-usr/1855.5.0/flatcar_production_iso_image.iso"
+  }
+}

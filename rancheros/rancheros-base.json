@@ -1,0 +1,47 @@
+{
+  "builders": [
+    {
+      "type": "hyperv-iso",
+      "guest_additions_mode": "disable",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "md5",
+      "ram_size": 2048,
+      "vm_name": "rancheros-min",
+      "ssh_username": "rancher",
+      "ssh_password": "rancher",
+      "communicator": "none",
+      "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+      "shutdown_timeout": "15m",
+      "floppy_files": [
+        "./scripts/install2disk"
+      ],
+      "switch_name": "External Switch",
+      "boot_wait": "{{user `boot_wait`}}",
+      "boot_command":
+      [
+         "sudo -i<enter>",
+         "echo rancher:rancher | chpasswd<enter>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type":"shell",
+      "environment_vars": [
+         "RANCHEROS_VERSION={{user `rancheros_version`}}",
+         "VERSION={{user `rancheros_version`}}"
+      ],
+      "script": "./scripts/install2disk"
+    }
+  ],
+  "post-processors": [
+  ],
+  "variables": {
+    "boot_wait": "90s",
+    "rancheros_version": "v1.4.1",
+    "iso_checksum_url": "https://releases.rancher.com/os/v1.4.1/iso-checksums.txt",
+    "iso_checksum": "b03ca6b90ba81d667f0bdafabccc2cde",
+    "iso_url": "https://releases.rancher.com/os/v1.4.1/rancheros.iso"
+  }
+}
