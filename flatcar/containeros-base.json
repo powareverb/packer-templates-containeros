@@ -22,6 +22,7 @@
         "wget http://{{.HTTPIP}}:{{.HTTPPort}}/install2disk.sh<enter>",
         "wget http://{{.HTTPIP}}:{{.HTTPPort}}/installpowershell.sh<enter>",
         "wget http://{{.HTTPIP}}:{{.HTTPPort}}/installseq.sh<enter>",
+        "wget http://{{.HTTPIP}}:{{.HTTPPort}}/sshd_config<enter>",
         "chmod a+x *.sh<enter>",
         "wget http://{{.HTTPIP}}:{{.HTTPPort}}/ignition.json<enter>",
         "wget -o /tmp/powershell.tar.gz http://{{.HTTPIP}}:{{.HTTPPort}}/files/powershell.tar.gz<enter>",

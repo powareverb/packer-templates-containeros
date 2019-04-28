@@ -8,6 +8,7 @@ sudo flatcar-install -d /dev/sda -f ~/flatcar_production_image.bin.bz2 -i igniti
 # Copy on files
 sudo mount /dev/sda9 /mnt
 sudo mkdir /mnt/home/core/install
+sudo mv ~/sshd_config /mnt/home/core/install
 sudo mv ~/powershell.tar.gz /mnt/home/core/install
 sudo mv ~/installpowershell.sh /mnt/home/core/install
 sudo mv ~/seqcli.tar.gz /mnt/home/core/install
@@ -25,6 +26,10 @@ sudo mount -o bind /usr/share /mnt/usr/share
 # Copy over bashrc
 sudo rm /mnt/home/core/.bashrc
 sudo cp /usr/share/skel/.bashrc /mnt/home/core
+
+# SSHD Customisation
+sudo mkdir -p /mnt/etc/ssh/
+sudo cp /mnt/home/core/install/sshd_config /mnt/etc/ssh/
 
 sudo chroot /mnt /bin/bash -c "/home/core/install/installpowershell.sh"
 sudo chroot /mnt /bin/bash -c "/home/core/install/installseq.sh"
