@@ -10,24 +10,30 @@ $VMMemorySize=2GB
 $Force=$true
 
 # TODO: Generate user_data
-
+# HACK: One prepared earlier
 if(!(Test-Path $VMConfigDriveBase)) {
-    $configDriveSizeBytes = 50MB
-    $cfgVHD = New-VHD -Path $VMConfigDriveBase -SizeBytes $configDriveSizeBytes
-    $tempDisk = Mount-DiskImage (Resolve-Path $VMConfigDriveBase)
-    if($tempDisk) {
-        $tempDisk | Initialize-Disk -PartitionStyle GPT
-        $disk = $tempDisk | Get-Disk
-        $part = $disk | New-Partition -UseMaximumSize
-        $part | Format-Volume -FileSystem FAT32
-        $tempDisk | Dismount-DiskImage
-    }
+    Expand-Archive "./config2_base.zip" -DestinationPath "./scripts/files/" -Force
 }
+# FIXME: This currently doesn't work I believe due to FAT32 XINT partition type
+# if(!(Test-Path $VMConfigDriveBase)) {
+#     $configDriveSizeBytes = 100MB
+#     $cfgVHD = New-VHD -Path $VMConfigDriveBase -SizeBytes $configDriveSizeBytes
+#     $tempDisk = Mount-DiskImage (Resolve-Path $VMConfigDriveBase)
+#     # $tempDisk2 = Mount-DiskImage (Resolve-Path "./config2_base2.vhdx")
+#     # $tempDisk |Get-Disk |Get-Partition
+#     if($tempDisk) {
+#         $tempDisk | Initialize-Disk -PartitionStyle MBR
+#         $disk = $tempDisk | Get-Disk
+#         $part = $disk | New-Partition -MbrType FAT32 -UseMaximumSize -IsActive
+#         $part | Format-Volume -FileSystem FAT32 -NewFileSystemLabel "config-2"
+#         $tempDisk | Dismount-DiskImage
+#     }
+# }
 
 $existing = Get-VM -Name $VMName -ErrorAction SilentlyContinue
 if($existing -and $Force) {
     Write-Warning "Removing existing VM: $VMName"
-    $existing | Stop-VM
+    $existing | Stop-VM -ErrorAction SilentlyContinue
     $existing | Remove-VM -Force
 }
 
