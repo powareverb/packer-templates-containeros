@@ -45,6 +45,17 @@ Copy-Item $VMConfigDriveSourceFile $VMConfigDriveFile -Force:$Force
 $tempDrive = Mount-DiskImage $VMConfigImageFile
 $volume = $tempDrive | Get-Disk | Get-Partition | Get-Volume
 $driveLetter = $volume | Select-Object -ExpandProperty DriveLetter
+if(!($driveLetter)) {
+    # Write-Warning "Assigning missing drive letter"
+    $diskNumber = ($tempDrive |Get-Disk).Number
+    $partitionNumber = (Get-Partition -DiskNumber $diskNumber | Select -f 1).PartitionNumber
+    if($diskNumber -and $partitionNumber) {
+        Add-PartitionAccessPath -DiskNumber $diskNumber -PartitionNumber $partitionNumber -AssignDriveLetter
+        $driveLetter = (Get-Partition -DiskNumber $diskNumber | Select -f 1).DriveLetter
+    } else {
+        throw "Error"
+    }
+}
 $drivePath = "$($driveLetter):/"
 # gci $drivePath
 $destPath = New-Item -ItemType Directory -Path "$drivePath/openstack/latest/" -ErrorAction SilentlyContinue
