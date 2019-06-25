@@ -9,13 +9,13 @@ set pfx=/mnt
 #curl -L -o /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/powershell-6.1.0-linux-x64.tar.gz
 
 # Create the target folder where powershell will be placed
-mkdir -p /opt/microsoft/powershell/6.1.0
+mkdir -p /opt/microsoft/powershell/6.2.0
 
 # Expand powershell to the target folder
-tar zxf ./powershell.tar.gz -C /opt/microsoft/powershell/6.1.0
+tar zxf ./powershell.tar.gz -C /opt/microsoft/powershell/6.2.0
 
 # Set execute permissions
-chmod +x /opt/microsoft/powershell/6.1.0/pwsh
+chmod +x /opt/microsoft/powershell/6.2.0/pwsh
 
 # Create the symbolic link that points to pwsh
 # Doesn't work as /usr/bin is readonly...
@@ -28,9 +28,9 @@ chmod +x /opt/microsoft/powershell/6.1.0/pwsh
 # export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 echo 'export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1' >> /home/core/.bashrc
-echo "alias pwsh='/opt/microsoft/powershell/6.1.0/pwsh'" >> /home/core/.bashrc
+echo "alias pwsh='/opt/microsoft/powershell/6.2.0/pwsh'" >> /home/core/.bashrc
 
 #echo "Subsystem powershell /usr/bin/pwsh -sshs -NoLogo -NoProfile"
-echo "Subsystem powershell /opt/microsoft/powershell/6.1.0/pwsh -sshs -NoLogo -NoProfile" >> /etc/ssh/sshd_config
+#echo "Subsystem powershell /opt/microsoft/powershell/6.2.0/pwsh -sshs -NoLogo -NoProfile" >> /etc/ssh/sshd_config
 
 exit

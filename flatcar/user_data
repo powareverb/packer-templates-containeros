@@ -1,0 +1,128 @@
+#cloud-config
+
+---
+hostname: {HOSTNAME}
+# passwd:
+users:
+  - name: core
+    ssh_authorized_keys:
+      - {AUTHORIZED_KEY}
+    groups: 
+      - "sudo"
+      - "docker"
+  - name: octo
+    ssh_authorized_keys:
+      - {AUTHORIZED_KEY}
+    groups:
+      - "docker"
+    shell: /usr/bin/toolbox -U -G sudo,docker,rkt
+coreos:
+  units:
+    - name: static.network
+      command: start
+      content: |
+        [Match]
+        Name=eth0
+
+        [Network]
+        Address={IPSTATIC_1_ADDR}/16
+        DNS={IPSTATIC_1_DNS1}
+        DNS={IPSTATIC_1_DNS2}
+        Gateway={IPSTATIC_1_GW}
+    - name: docker.service
+      command: start
+    - name: swapon.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Turn on swap
+        [Service]
+        Type=oneshot
+        Environment="SWAPFILE=/4GiB.swap"
+        RemainAfterExit=true
+        ExecStartPre=/usr/bin/touch ${SWAPFILE}
+        ExecStartPre=/usr/bin/chattr -C ${SWAPFILE}
+        ExecStartPre=/usr/bin/fallocate -l 4096m ${SWAPFILE}
+        ExecStartPre=/usr/bin/chmod 600 ${SWAPFILE}
+        ExecStartPre=/usr/sbin/mkswap ${SWAPFILE}
+        ExecStartPre=/usr/sbin/losetup -f ${SWAPFILE}
+        ExecStart=/usr/bin/sh -c "/sbin/swapon $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        ExecStop=/usr/bin/sh -c "/sbin/swapoff $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        ExecStopPost=/usr/bin/sh -c "/usr/sbin/losetup -d $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        [Install]
+        WantedBy=multi-user.target    
+    - name: hv-kvp-daemon.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Hyper-V Integration Daemon
+        [Service]
+        ExecStart=/opt/microsoft/bin/hv_kvp_daemon -n
+        [Install]
+        WantedBy=multi-user.target
+    # TODO: Manage some other way?
+    - name: locksmithd.service
+      enable: false
+       
+#   update:
+#     reboot-strategy: etcd-lock
+#     group: alpha
+# manage_etc_hosts: localhost
+
+write_files:
+  - path: /etc/ssh/sshd_config
+    filesystem: root
+    mode: 0600
+    contents:
+      inline: |
+        # Use most defaults for sshd configuration.
+        Subsystem sftp internal-sftp
+        Subsystem powershell /opt/microsoft/powershell/6.2.0/pwsh -sshs -NoLogo -NoProfile
+        ClientAliveInterval 180
+        UseDNS no
+        UsePAM yes
+        PrintLastLog no # handled by PAM
+        PrintMotd yes # handled by PAM
+
+        AllowUsers core octo
+        AuthenticationMethods publickey
+
+  - path: /etc/environment
+    permissions: 0644
+    content: |
+      COREOS_PUBLIC_IPV4={IPSTATIC_1_ADDR}
+      COREOS_PRIVATE_IPV4={IPSTATIC_1_ADDR}
+      DOCKER_NODE={HOSTNAME}
+      DOCKER_DC={DOCKER_DC}
+      DOCKER_BASEDOMAIN={DOCKER_BASEDOMAIN}
+
+  - path: /etc/motd
+    permissions: 0644
+    content: |
+      Welcome to Docker Dev CoreOS machine  
+
+  - path: /etc/coreos/update.conf
+    permissions: 0644
+    content: |
+      REBOOT_STRATEGY=off
+
+  - path: /home/core/.toolboxrc
+    owner: core
+    content: |
+      TOOLBOX_DOCKER_IMAGE=gavinjonespf/docker-coreos-toolbox
+      TOOLBOX_DOCKER_TAG=latest
+      TOOLBOX_USER=root
+      TOOLBOX_BIND="--bind=/var/run/docker.sock:/var/run/docker.sock --bind=/home/core:/home/core --bind=/:/media/root/"
+    permissions: 0644
+
+    # Not working?
+  - path: /home/octo/.toolboxrc
+    owner: core
+    content: |
+      TOOLBOX_DOCKER_IMAGE=gavinjonespf/docker-coreos-toolbox
+      TOOLBOX_DOCKER_TAG=latest
+      TOOLBOX_USER=octo
+      TOOLBOX_BIND="--bind=/var/run/docker.sock:/var/run/docker.sock --bind=/home/octo:/home/octo"
+    permissions: 0644

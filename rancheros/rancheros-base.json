@@ -10,7 +10,7 @@
       "vm_name": "rancheros-min",
       "ssh_username": "rancher",
       "ssh_password": "rancher",
-      "communicator": "none",
+      "communicator": "ssh",
       "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
       "shutdown_timeout": "15m",
       "floppy_files": [
@@ -38,10 +38,10 @@
   "post-processors": [
   ],
   "variables": {
-    "boot_wait": "90s",
-    "rancheros_version": "v1.4.1",
-    "iso_checksum_url": "https://releases.rancher.com/os/v1.4.1/iso-checksums.txt",
-    "iso_checksum": "b03ca6b90ba81d667f0bdafabccc2cde",
-    "iso_url": "https://releases.rancher.com/os/v1.4.1/rancheros.iso"
+    "boot_wait": "60s",
+    "rancheros_version": "v1.5.1",
+    "iso_checksum_url": "https://releases.rancher.com/os/v1.5.1/iso-checksums.txt",
+    "iso_checksum": "61336c6c1f7a0815339fdf16c3e0183c",
+    "iso_url": "https://releases.rancher.com/os/v1.5.1/rancheros.iso"
   }
 }

@@ -28,6 +28,8 @@
         "wget -o /tmp/powershell.tar.gz http://{{.HTTPIP}}:{{.HTTPPort}}/files/powershell.tar.gz<enter>",
         "wget -o /tmp/seqcli.tar.gz http://{{.HTTPIP}}:{{.HTTPPort}}/files/seqcli.tar.gz<enter>",
         "wget http://{{.HTTPIP}}:{{.HTTPPort}}/files/flatcar_production_image.bin.bz2<enter>",
+        "wget http://{{.HTTPIP}}:{{.HTTPPort}}/files/hv_kvp_daemon<enter>",
+        "wget http://{{.HTTPIP}}:{{.HTTPPort}}/hv-kvp-daemon.service<enter>",
         "./install2disk.sh<enter>"
       ]
     }

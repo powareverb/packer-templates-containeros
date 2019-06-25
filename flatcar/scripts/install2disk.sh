@@ -13,6 +13,8 @@ sudo mv ~/powershell.tar.gz /mnt/home/core/install
 sudo mv ~/installpowershell.sh /mnt/home/core/install
 sudo mv ~/seqcli.tar.gz /mnt/home/core/install
 sudo mv ~/installseq.sh /mnt/home/core/install
+sudo mv ~/hv_kvp_daemon /mnt/home/core/install
+sudo mv ~/hv-kvp-daemon.service /mnt/home/core/install
 cd /mnt
 
 # chroot
@@ -27,9 +29,16 @@ sudo mount -o bind /usr/share /mnt/usr/share
 sudo rm /mnt/home/core/.bashrc
 sudo cp /usr/share/skel/.bashrc /mnt/home/core
 
-# SSHD Customisation
-sudo mkdir -p /mnt/etc/ssh/
-sudo cp /mnt/home/core/install/sshd_config /mnt/etc/ssh/
+# SSHD Customisation - Done in user_data
+#sudo mkdir -p /mnt/etc/ssh/
+#sudo cp /mnt/home/core/install/sshd_config /mnt/etc/ssh/
+
+# HyperV
+sudo mkdir -p /mnt/opt/microsoft/bin
+sudo cp /mnt/home/core/install/hv_kvp_daemon /mnt/opt/microsoft/bin
+sudo chmod +x /mnt/opt/microsoft/bin/*
+# Do via cloudinit/ignition?
+#sudo cp /mnt/home/core/install/hyperv.service /etc/systemd/system/
 
 sudo chroot /mnt /bin/bash -c "/home/core/install/installpowershell.sh"
 sudo chroot /mnt /bin/bash -c "/home/core/install/installseq.sh"

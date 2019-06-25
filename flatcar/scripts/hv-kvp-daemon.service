@@ -1,0 +1,11 @@
+[Unit]
+Description=Hyper-V Integration Daemon
+After=update-engine.service
+
+[Service]
+ExecStart=/opt/microsoft/bin/hv_kvp_daemon
+Restart=on-failure
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target
