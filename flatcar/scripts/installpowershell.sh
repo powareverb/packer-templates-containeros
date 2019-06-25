@@ -31,6 +31,6 @@ echo 'export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1' >> /home/core/.bashrc
 echo "alias pwsh='/opt/microsoft/powershell/6.2.0/pwsh'" >> /home/core/.bashrc
 
 #echo "Subsystem powershell /usr/bin/pwsh -sshs -NoLogo -NoProfile"
-#echo "Subsystem powershell /opt/microsoft/powershell/6.2.0/pwsh -sshs -NoLogo -NoProfile" >> /etc/ssh/sshd_config
+echo "Subsystem powershell /opt/microsoft/powershell/6.2.0/pwsh -sshs -NoLogo -NoProfile" >> /etc/ssh/sshd_config
 
 exit

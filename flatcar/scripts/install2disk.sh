@@ -30,8 +30,8 @@ sudo rm /mnt/home/core/.bashrc
 sudo cp /usr/share/skel/.bashrc /mnt/home/core
 
 # SSHD Customisation - Done in user_data
-#sudo mkdir -p /mnt/etc/ssh/
-#sudo cp /mnt/home/core/install/sshd_config /mnt/etc/ssh/
+sudo mkdir -p /mnt/etc/ssh/
+sudo cp /mnt/home/core/install/sshd_config /mnt/etc/ssh/
 
 # HyperV
 sudo mkdir -p /mnt/opt/microsoft/bin
