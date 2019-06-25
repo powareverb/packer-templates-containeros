@@ -3,13 +3,26 @@
 $VMName = "flatcar-buildtest"
 $VMDefaultStorage = Resolve-Path "D:\vms\HyperV"
 $VMBaseImage = "./output-hyperv-iso/Virtual Hard Disks/flatcar-base.vhdx"
-$VMConfigDriveBase = "./config2_base.vhdx"
+$VMConfigDriveBase = "./scripts/files/config2_base.vhdx"
 $VMConfigDriveSourceFile = "./scripts/files/user_data"
 $VMDefaultSwitch = "External Switch"
 $VMMemorySize=2GB
 $Force=$true
 
 # TODO: Generate user_data
+
+if(!(Test-Path $VMConfigDriveBase)) {
+    $configDriveSizeBytes = 50MB
+    $cfgVHD = New-VHD -Path $VMConfigDriveBase -SizeBytes $configDriveSizeBytes
+    $tempDisk = Mount-DiskImage (Resolve-Path $VMConfigDriveBase)
+    if($tempDisk) {
+        $tempDisk | Initialize-Disk -PartitionStyle GPT
+        $disk = $tempDisk | Get-Disk
+        $part = $disk | New-Partition -UseMaximumSize
+        $part | Format-Volume -FileSystem FAT32
+        $tempDisk | Dismount-DiskImage
+    }
+}
 
 $existing = Get-VM -Name $VMName -ErrorAction SilentlyContinue
 if($existing -and $Force) {
