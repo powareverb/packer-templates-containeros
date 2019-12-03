@@ -1,2 +1,2 @@
-packer build .\rancheros-base.json 
+packer build -force .\rancheros-base.json
 

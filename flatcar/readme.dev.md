@@ -1,14 +1,18 @@
 
+# Todo
 
-Provisioners testing
-{
-      "type": "shell",
-      "environment_vars": [
-         "RANCHEROS_VERSION={{user `rancheros_version`}}",
-         "VERSION={{user `rancheros_version`}}"
-      ],
-      "script": "./scripts/install2disk"
-    }
+- PowerShell remoting?
+- Seed vs cluster setup
+- Bootstrap configs & config generation
+- SSH Keys?
+- Octo user
+- SFTP setup
+
+# Done
+- Ensure toolbox?
+- Testing resized drives
+
+# Old todo
 
 https://docs.flatcar-linux.org/os/migrating-to-clcs/
 https://docs.flatcar-linux.org/ignition/network-configuration/
@@ -19,5 +23,3 @@ TODO Ignition:
 - Set hostname
 
 Further:
-- Seed vs cluster setup
-- Bootstrap configs?

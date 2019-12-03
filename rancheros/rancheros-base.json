@@ -6,8 +6,8 @@
       "iso_url": "{{ user `iso_url` }}",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_checksum_type": "md5",
-      "ram_size": 2048,
-      "vm_name": "rancheros-min",
+      "memory": 2048,
+      "vm_name": "rancheros-base",
       "ssh_username": "rancher",
       "ssh_password": "rancher",
       "communicator": "ssh",
@@ -30,7 +30,8 @@
       "type":"shell",
       "environment_vars": [
          "RANCHEROS_VERSION={{user `rancheros_version`}}",
-         "VERSION={{user `rancheros_version`}}"
+         "VERSION={{user `rancheros_version`}}",
+         "RANCHER_KEY={{user `rancher_key`}}"
       ],
       "script": "./scripts/install2disk"
     }
@@ -39,9 +40,10 @@
   ],
   "variables": {
     "boot_wait": "60s",
-    "rancheros_version": "v1.5.1",
-    "iso_checksum_url": "https://releases.rancher.com/os/v1.5.1/iso-checksums.txt",
-    "iso_checksum": "61336c6c1f7a0815339fdf16c3e0183c",
-    "iso_url": "https://releases.rancher.com/os/v1.5.1/rancheros.iso"
+    "rancheros_version": "v1.5.4",
+    "iso_checksum_url": "https://github.com/rancher/os/releases/download/v1.5.4/checksums.txt",
+    "iso_checksum": "da12ab5223652c48dd70ac593ea40d9b",
+    "iso_url": "https://github.com/rancher/os/releases/download/v1.5.4/rancheros-hyperv.iso",
+    "rancher_key": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAqTKCokee2XPlggoWBkc+IH6CRcLGZ722T8UKPBwR8GuaKoS4QMDKmTwPQhIuSj4vLlQKU7trvgJAXi/fRBo1C4Ija8eoKpBce9C3ofcHWVvqkhsDqM+qe/8+dJih9MZfNTiDRstMaQjIDUHTI7+v92OKnkMDGHc9T48pbZBxJikKULBWvfiYKImXTRvdig7kN9/1GCwPOC1SwmMsn8j22VbRJqAIMtc7Yf4jhqO3NFFpmGF1cgikVSEubOCUEFvJQjSM1NV+ikOoc6Tx7Ycnt6wfgLLeJleMU8YwCU/SKYt1qDfxv+v16NgpoSxnOQiPoW+KynWrFnQf78ShsjTd+Q== c6:86:74:6c:5a:54:ef:a5:44:3f:3f:ad:e2:49:c2:2f rsa-key-20150424"
   }
 }
