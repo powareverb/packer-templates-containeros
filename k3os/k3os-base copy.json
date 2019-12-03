@@ -1,0 +1,57 @@
+{
+  "builders": [
+    {
+      "type": "hyperv-iso",
+      "guest_additions_mode": "disable",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "md5",
+      "memory": 2048,
+      "vm_name": "k3os-min",
+      "ssh_username": "rancher",
+      "ssh_password": "rancher",
+      "communicator": "none",
+      "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+      "shutdown_timeout": "15m",
+      "floppy_files": [
+        "./scripts/install2disk.sh"
+      ],
+      "switch_name": "External Switch",
+      "boot_wait": "{{user `boot_wait`}}",
+      "boot_command":
+      [
+         "rancher<enter>",
+         "export http_proxy=http://{{.HTTPIP}}:{{ user `proxy_port` }}<enter>",
+         "wget http://{{.HTTPIP}}:{{.HTTPPort}}/install2disk.sh<enter>",
+         "chmod +x ./install2disk.sh<enter>",
+         "export K3OS_VERSION={{user `k3os_version`}}<enter>",
+         "export PACKER_BUILD_NAME=k3os<enter>",
+         "./install2disk.sh<enter>",
+         "sudo os-config<enter><wait5>",
+         "1<enter><wait>",
+         "y<enter><wait>",
+         "./cloud-config.yml<enter><wait>",
+         "y<enter>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type":"shell",
+      "environment_vars": [
+         "K3OS_VERSION={{user `k3os_version`}}",
+         "VERSION={{user `k3os_version`}}",
+         "RANCHER_KEY={{user `rancher_key`}}"
+      ],
+      "script": "./scripts/install2disk.sh"
+    }
+  ],
+  "post-processors": [
+  ],
+  "variables": {
+    "boot_wait": "20s",
+    "k3os_version": "v0.2.0-rc2",
+    "iso_checksum": "F7C0E9A90B1A3272F997F78A87A890F8",
+    "iso_url": "https://github.com/rancher/k3os/releases/download/v0.2.0-rc2/k3os.iso"
+  }
+}
